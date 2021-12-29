@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 
 void core_convertion_algorithm(FILE *, FILE *);
 void copy(char *, char *);
