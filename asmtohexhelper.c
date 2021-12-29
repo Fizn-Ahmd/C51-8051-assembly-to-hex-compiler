@@ -1,7 +1,8 @@
 #include "asmtohex.h"
+
 #include <stdio.h>
 
-// This funtion does the strcpy operation //
+/* This funtion does the strcpy operation */
 void copy(char *src, char *dest) {
   while (*dest) {
     *src = *dest;
@@ -11,7 +12,7 @@ void copy(char *src, char *dest) {
   *src = *dest;
 }
 
-// Removing Spaces if there are any in asaembly file //
+/* Removing Spaces if there are any in assembly file */
 void converting_read_lines_from_asm_file(char *str) {
   while (*str) {
     if (*str == ' ') {
@@ -22,7 +23,7 @@ void converting_read_lines_from_asm_file(char *str) {
   }
 }
 
-// This funtion reverse the given string //
+/* This funtion reverse the given string */
 void str_rev(char *str) {
   char temp, *str2 = str;
   while (*str2)
@@ -37,8 +38,7 @@ void str_rev(char *str) {
   }
 }
 
-// This funtion coverts the string hexadecimal to integer. eg: '0A' is converted
-// to 10. //
+/* This funtion coverts the string hexadecimal to integer. eg: '0A' is converted to 10. */
 int converting_string_to_integer(char *str) {
   int i = 0, num = 0;
   while (str[i]) {
@@ -53,7 +53,7 @@ int converting_string_to_integer(char *str) {
   return num;
 }
 
-// THis funtion return the sum of array //
+/* This funtion return the sum of array */
 int sum(int *arr, int c) {
   int sum = c, i = 0;
   i = 0;
@@ -64,7 +64,7 @@ int sum(int *arr, int c) {
   return sum;
 }
 
-// Calculating the checksum //
+/* Calculating the checksum */
 char checksum(char *p, char *q) {
   char s[3], ch;
   int a[40], count = 0;
@@ -99,6 +99,7 @@ char checksum(char *p, char *q) {
   return ch;
 }
 
+/* Writing the generated hex code to the output file */
 void writing_to_hex_file(FILE *fs, char *d, char *h) {
   char ch;
   ch = checksum(d, h);

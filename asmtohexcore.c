@@ -1,8 +1,9 @@
+#include "asmtohex.h"
+
 #include <stdio.h>
 #include <string.h>
 
-#include "asmtohex.h"
-
+/* Core Algorithm takes the input file and generate output hex code */
 void core_convertion_algorithm(FILE *fp, FILE *fs) {
   char s[100], d[20], h[20], hu[50];
   int j = 0;
