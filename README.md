@@ -1,4 +1,4 @@
-Procedure to build:
+**Procedure to build:**
 
 1. make -f Makefile.mk all
 
@@ -8,10 +8,11 @@ To clean the build
 
 1. make -f Makefile clean
 
-Using the generated binaries:
+**Using the generated binaries:**
 
-1. asmtohex <c51 asm file> 
+1. Run ./asmtohex < c51 asm file >
 
 2. It will generate the a.hex
 
 3. Load the a.hex into 8051 board.
+
