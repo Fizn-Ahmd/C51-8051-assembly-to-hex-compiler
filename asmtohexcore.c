@@ -79,7 +79,14 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "3,#") != NULL) || (strstr(s, "4,#") != NULL) ||
           (strstr(s, "5,#") != NULL) || (strstr(s, "6,#") != NULL) ||
           (strstr(s, "7,#") != NULL) || (strstr(s, "8,#") != NULL) ||
+          (strstr(s, "C,#") != NULL) || (strstr(s, "D,#") != NULL) ||
+          (strstr(s, "E,#") != NULL) || (strstr(s, "F,#") != NULL) ||
+          (strstr(s, "c,#") != NULL) || (strstr(s, "d,#") != NULL) ||
+          (strstr(s, "e,#") != NULL) || (strstr(s, "f,#") != NULL) ||
           (strstr(s, "9,#") != NULL) || (strstr(s, "0A,#") != NULL) ||
+          (strstr(s, "a,#") != NULL) || (strstr(s, "0a,#") != NULL) ||
+          (strstr(s, "fA,#") != NULL) || (strstr(s, "B,#") != NULL) ||
+          (strstr(s, "fa,#") != NULL) || (strstr(s, "b,#") != NULL) ||
           (strstr(s, "1A,#") != NULL) || (strstr(s, "2A,#") != NULL) ||
           (strstr(s, "3A,#") != NULL) || (strstr(s, "4A,#") != NULL) ||
           (strstr(s, "5A,#") != NULL) || (strstr(s, "6A,#") != NULL) ||
@@ -90,10 +97,6 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "FA,#") != NULL) || (strstr(s, "aA,#") != NULL) ||
           (strstr(s, "bA,#") != NULL) || (strstr(s, "cA,#") != NULL) ||
           (strstr(s, "dA,#") != NULL) || (strstr(s, "eA,#") != NULL) ||
-          (strstr(s, "fA,#") != NULL) || (strstr(s, "B,#") != NULL) ||
-          (strstr(s, "C,#") != NULL) || (strstr(s, "D,#") != NULL) ||
-          (strstr(s, "E,#") != NULL) || (strstr(s, "F,#") != NULL) ||
-          (strstr(s, "a,#") != NULL) || (strstr(s, "0a,#") != NULL) ||
           (strstr(s, "1a,#") != NULL) || (strstr(s, "2a,#") != NULL) ||
           (strstr(s, "3a,#") != NULL) || (strstr(s, "4a,#") != NULL) ||
           (strstr(s, "5a,#") != NULL) || (strstr(s, "6a,#") != NULL) ||
@@ -103,10 +106,8 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "Da,#") != NULL) || (strstr(s, "Ea,#") != NULL) ||
           (strstr(s, "Fa,#") != NULL) || (strstr(s, "aa,#") != NULL) ||
           (strstr(s, "ba,#") != NULL) || (strstr(s, "ca,#") != NULL) ||
-          (strstr(s, "da,#") != NULL) || (strstr(s, "ea,#") != NULL) ||
-          (strstr(s, "fa,#") != NULL) || (strstr(s, "b,#") != NULL) ||
-          (strstr(s, "c,#") != NULL) || (strstr(s, "d,#") != NULL) ||
-          (strstr(s, "e,#") != NULL) || (strstr(s, "f,#") != NULL)) {
+          (strstr(s, "da,#") != NULL) || (strstr(s, "ea,#") != NULL)) {
+
         if (j >= 32) {
           j = 0;
           writing_to_hex_file(fs, d, h);
@@ -493,6 +494,11 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "4,@") != NULL) || (strstr(s, "5,@") != NULL) ||
           (strstr(s, "6,@") != NULL) || (strstr(s, "7,@") != NULL) ||
           (strstr(s, "8,@") != NULL) || (strstr(s, "9,@") != NULL) ||
+          (strstr(s, "B,@") != NULL) || (strstr(s, "C,@") != NULL) ||
+          (strstr(s, "D,@") != NULL) || (strstr(s, "E,@") != NULL) ||
+          (strstr(s, "F,@") != NULL) || (strstr(s, "a,@") != NULL) ||
+          (strstr(s, "b,@") != NULL) || (strstr(s, "c,@") != NULL) ||
+          (strstr(s, "d,@") != NULL) || (strstr(s, "e,@") != NULL) ||
           (strstr(s, "0A,@") != NULL) || (strstr(s, "1A,@") != NULL) ||
           (strstr(s, "2A,@") != NULL) || (strstr(s, "3A,@") != NULL) ||
           (strstr(s, "4A,@") != NULL) || (strstr(s, "5A,@") != NULL) ||
@@ -504,9 +510,6 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "aA,@") != NULL) || (strstr(s, "bA,@") != NULL) ||
           (strstr(s, "cA,@") != NULL) || (strstr(s, "dA,@") != NULL) ||
           (strstr(s, "eA,@") != NULL) || (strstr(s, "fA,@") != NULL) ||
-          (strstr(s, "B,@") != NULL) || (strstr(s, "C,@") != NULL) ||
-          (strstr(s, "D,@") != NULL) || (strstr(s, "E,@") != NULL) ||
-          (strstr(s, "F,@") != NULL) || (strstr(s, "a,@") != NULL) ||
           (strstr(s, "0a,@") != NULL) || (strstr(s, "1a,@") != NULL) ||
           (strstr(s, "2a,@") != NULL) || (strstr(s, "3a,@") != NULL) ||
           (strstr(s, "4a,@") != NULL) || (strstr(s, "5a,@") != NULL) ||
@@ -518,9 +521,8 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "aa,@") != NULL) || (strstr(s, "ba,@") != NULL) ||
           (strstr(s, "ca,@") != NULL) || (strstr(s, "da,@") != NULL) ||
           (strstr(s, "ea,@") != NULL) || (strstr(s, "fa,@") != NULL) ||
-          (strstr(s, "b,@") != NULL) || (strstr(s, "c,@") != NULL) ||
-          (strstr(s, "d,@") != NULL) || (strstr(s, "e,@") != NULL) ||
           (strstr(s, "f,@") != NULL)) {
+
         if ((strstr(s, "@R0")) || (strstr(s, "@r0"))) {
           if (j >= 32) {
             h[j] = '\0';
@@ -559,6 +561,24 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "4,R") != NULL) || (strstr(s, "5,R") != NULL) ||
           (strstr(s, "6,R") != NULL) || (strstr(s, "7,R") != NULL) ||
           (strstr(s, "8,R") != NULL) || (strstr(s, "9,R") != NULL) ||
+          (strstr(s, "B,R") != NULL) || (strstr(s, "C,R") != NULL) ||
+          (strstr(s, "D,R") != NULL) || (strstr(s, "E,R") != NULL) ||
+          (strstr(s, "F,R") != NULL) || (strstr(s, "a,R") != NULL) ||
+          (strstr(s, "b,R") != NULL) || (strstr(s, "c,R") != NULL) ||
+          (strstr(s, "d,R") != NULL) || (strstr(s, "e,R") != NULL) ||
+          (strstr(s, "f,R") != NULL) || (strstr(s, "0,r") != NULL) ||
+          (strstr(s, "1,r") != NULL) || (strstr(s, "2,r") != NULL) ||
+          (strstr(s, "3,r") != NULL) || (strstr(s, "4,r") != NULL) ||
+          (strstr(s, "5,r") != NULL) || (strstr(s, "6,r") != NULL) ||
+          (strstr(s, "7,r") != NULL) || (strstr(s, "8,r") != NULL) ||
+          (strstr(s, "C,r") != NULL) || (strstr(s, "D,r") != NULL) ||
+          (strstr(s, "E,r") != NULL) || (strstr(s, "F,r") != NULL) ||
+          (strstr(s, "c,r") != NULL) || (strstr(s, "d,r") != NULL) ||
+          (strstr(s, "e,r") != NULL) || (strstr(s, "f,r") != NULL) ||
+          (strstr(s, "9,r") != NULL) || (strstr(s, "0A,r") != NULL) ||
+          (strstr(s, "fA,r") != NULL) || (strstr(s, "B,r") != NULL) ||
+          (strstr(s, "a,r") != NULL) || (strstr(s, "0a,r") != NULL) ||
+          (strstr(s, "fa,r") != NULL) || (strstr(s, "b,r") != NULL) ||
           (strstr(s, "0A,R") != NULL) || (strstr(s, "1A,R") != NULL) ||
           (strstr(s, "2A,R") != NULL) || (strstr(s, "3A,R") != NULL) ||
           (strstr(s, "4A,R") != NULL) || (strstr(s, "5A,R") != NULL) ||
@@ -570,9 +590,6 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "aA,R") != NULL) || (strstr(s, "bA,R") != NULL) ||
           (strstr(s, "cA,R") != NULL) || (strstr(s, "dA,R") != NULL) ||
           (strstr(s, "eA,R") != NULL) || (strstr(s, "fA,R") != NULL) ||
-          (strstr(s, "B,R") != NULL) || (strstr(s, "C,R") != NULL) ||
-          (strstr(s, "D,R") != NULL) || (strstr(s, "E,R") != NULL) ||
-          (strstr(s, "F,R") != NULL) || (strstr(s, "a,R") != NULL) ||
           (strstr(s, "0a,R") != NULL) || (strstr(s, "1a,R") != NULL) ||
           (strstr(s, "2a,R") != NULL) || (strstr(s, "3a,R") != NULL) ||
           (strstr(s, "4a,R") != NULL) || (strstr(s, "5a,R") != NULL) ||
@@ -584,14 +601,6 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "aa,R") != NULL) || (strstr(s, "ba,R") != NULL) ||
           (strstr(s, "ca,R") != NULL) || (strstr(s, "da,R") != NULL) ||
           (strstr(s, "ea,R") != NULL) || (strstr(s, "fa,R") != NULL) ||
-          (strstr(s, "b,R") != NULL) || (strstr(s, "c,R") != NULL) ||
-          (strstr(s, "d,R") != NULL) || (strstr(s, "e,R") != NULL) ||
-          (strstr(s, "f,R") != NULL) || (strstr(s, "0,r") != NULL) ||
-          (strstr(s, "1,r") != NULL) || (strstr(s, "2,r") != NULL) ||
-          (strstr(s, "3,r") != NULL) || (strstr(s, "4,r") != NULL) ||
-          (strstr(s, "5,r") != NULL) || (strstr(s, "6,r") != NULL) ||
-          (strstr(s, "7,r") != NULL) || (strstr(s, "8,r") != NULL) ||
-          (strstr(s, "9,r") != NULL) || (strstr(s, "0A,r") != NULL) ||
           (strstr(s, "1A,r") != NULL) || (strstr(s, "2A,r") != NULL) ||
           (strstr(s, "3A,r") != NULL) || (strstr(s, "4A,r") != NULL) ||
           (strstr(s, "5A,r") != NULL) || (strstr(s, "6A,r") != NULL) ||
@@ -602,10 +611,6 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "FA,r") != NULL) || (strstr(s, "aA,r") != NULL) ||
           (strstr(s, "bA,r") != NULL) || (strstr(s, "cA,r") != NULL) ||
           (strstr(s, "dA,r") != NULL) || (strstr(s, "eA,r") != NULL) ||
-          (strstr(s, "fA,r") != NULL) || (strstr(s, "B,r") != NULL) ||
-          (strstr(s, "C,r") != NULL) || (strstr(s, "D,r") != NULL) ||
-          (strstr(s, "E,r") != NULL) || (strstr(s, "F,r") != NULL) ||
-          (strstr(s, "a,r") != NULL) || (strstr(s, "0a,r") != NULL) ||
           (strstr(s, "1a,r") != NULL) || (strstr(s, "2a,r") != NULL) ||
           (strstr(s, "3a,r") != NULL) || (strstr(s, "4a,r") != NULL) ||
           (strstr(s, "5a,r") != NULL) || (strstr(s, "6a,r") != NULL) ||
@@ -615,10 +620,8 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           (strstr(s, "Da,r") != NULL) || (strstr(s, "Ea,r") != NULL) ||
           (strstr(s, "Fa,r") != NULL) || (strstr(s, "aa,r") != NULL) ||
           (strstr(s, "ba,r") != NULL) || (strstr(s, "ca,r") != NULL) ||
-          (strstr(s, "da,r") != NULL) || (strstr(s, "ea,r") != NULL) ||
-          (strstr(s, "fa,r") != NULL) || (strstr(s, "b,r") != NULL) ||
-          (strstr(s, "c,r") != NULL) || (strstr(s, "d,r") != NULL) ||
-          (strstr(s, "e,r") != NULL) || (strstr(s, "f,r") != NULL)) {
+          (strstr(s, "da,r") != NULL) || (strstr(s, "ea,r") != NULL)) {
+
         if ((strstr(s, "R0")) || (strstr(s, "r0"))) {
           if (j >= 32) {
             h[j] = '\0';
