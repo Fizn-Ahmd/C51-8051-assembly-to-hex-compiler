@@ -10,7 +10,7 @@ To clean the build
 
 **Using the generated binaries:**
 
-1. Run ./asmtohex < c51 asm file >
+1. Run asmtohex <\c51 asm file/>
 
 2. It will generate the a.hex
 
