@@ -1,4 +1,4 @@
-#include "asmtohex.h"
+#include "../include/asmtohex.h"
 
 #include <stdio.h>
 

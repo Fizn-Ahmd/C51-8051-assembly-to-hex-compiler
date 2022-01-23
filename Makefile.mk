@@ -8,11 +8,12 @@ CFLAGS  = -g -Wall
 
 # the build target executable:
 TARGET = asmtohex
+DIR = src/
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).c
-	$(CC) $(CFLAGS) -o $(TARGET) asmtohex.c asmtohexcore.c asmtohexhelper.c asmtohex.h
+$(TARGET): $(DIR)$(TARGET).c
+	$(CC) $(CFLAGS) -o $(TARGET) src/asmtohex.c src/asmtohexcore.c src/asmtohexhelper.c include/asmtohex.h
 
 clean:
 	$(RM) $(TARGET)
