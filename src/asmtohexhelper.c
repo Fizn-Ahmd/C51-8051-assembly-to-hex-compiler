@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /* This funtion does the strcpy operation */
-void copy(char *src, char *dest) {
+void str_cpy(char *src, char *dest) {
   while (*dest) {
     *src = *dest;
     dest++;
@@ -13,10 +13,10 @@ void copy(char *src, char *dest) {
 }
 
 /* Removing Spaces if there are any in assembly file */
-void converting_read_lines_from_asm_file(char *str) {
+void remove_spaces_in_string_buffer(char *str) {
   while (*str) {
     if (*str == ' ') {
-      copy(str, str + 1);
+      str_cpy(str, str + 1);
       str--;
     }
     str++;
@@ -39,7 +39,7 @@ void str_rev(char *str) {
 }
 
 /* This funtion coverts the string hexadecimal to integer. eg: '0A' is converted to 10. */
-int converting_string_to_integer(char *str) {
+int str_to_int(char *str) {
   int i = 0, num = 0;
   while (str[i]) {
     if (str[i] >= '0' && str[i] <= '9') {
@@ -54,9 +54,8 @@ int converting_string_to_integer(char *str) {
 }
 
 /* This funtion return the sum of array */
-int sum(int *arr, int c) {
-  int sum = c, i = 0;
-  i = 0;
+int arr_sum(int *arr, int count) {
+  int sum = count, i = 0;
   while (arr[i] != -1) {
     sum = sum + arr[i];
     i++;
@@ -76,7 +75,7 @@ char checksum(char *p, char *q) {
     if (j == 2) {
       s[j] = '\0';
       j = 0;
-      a[k] = converting_string_to_integer(s);
+      a[k] = str_to_int(s);
       k++;
     }
   }
@@ -89,18 +88,18 @@ char checksum(char *p, char *q) {
     if (j == 2) {
       s[j] = '\0';
       j = 0;
-      a[k] = converting_string_to_integer(s);
+      a[k] = str_to_int(s);
       k++;
       count++;
     }
   }
   a[k] = -1;
-  ch = sum(a, count);
+  ch = arr_sum(a, count);
   return ch;
 }
 
 /* Writing the generated hex code to the output file */
-void writing_to_hex_file(FILE *fs, char *d, char *h) {
+void write_to_hex_file(FILE *fs, char *d, char *h) {
   char ch;
   ch = checksum(d, h);
   ch = ~ch;
@@ -111,18 +110,23 @@ void writing_to_hex_file(FILE *fs, char *d, char *h) {
     gi[0] = (ch >> 4 & 0x0f) + 48;
   else
     gi[0] = (ch >> 4 & 0x0f) + 55;
+
   gfx = ch & 0x0F;
+
   if (gfx >= 0 && gfx <= 9)
     gi[1] = (ch & 0x0F) + 48;
   else
     gi[1] = (ch & 0x0F) + 55;
+
   gi[2] = '\0';
+
   int i = 0, count = 0;
   while (h[i]) {
     if (i % 2 == 0)
       count++;
     i++;
   }
+
   fputc(':', fs);
   if (count >= 0 && count <= 9) {
     fputc('0', fs);
@@ -134,6 +138,7 @@ void writing_to_hex_file(FILE *fs, char *d, char *h) {
     fputc('1', fs);
     fputc('0', fs);
   }
+
   fputs(d, fs);
   fputc('0', fs);
   fputc('0', fs);

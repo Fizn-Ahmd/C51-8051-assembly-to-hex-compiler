@@ -9,7 +9,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
   int j = 0;
 
   while ((fgets(s, 100, fp)) != NULL) {
-    converting_read_lines_from_asm_file(s);
+    remove_spaces_in_string_buffer(s);
     printf("%s", s);
     if ((strstr(s, "END") != NULL) || (strstr(s, "end") != NULL)) {
       break;
@@ -43,7 +43,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = '4';
@@ -54,7 +54,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -63,7 +63,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -110,7 +110,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
 
         if (j >= 32) {
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = '5';
@@ -120,7 +120,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
             if (j >= 32) {
               h[j] = '\0';
               j = 0;
-              writing_to_hex_file(fs, d, h);
+              write_to_hex_file(fs, d, h);
             }
             h[j++] = s[i - 3];
             h[j++] = s[i - 2];
@@ -128,7 +128,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -137,7 +137,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -151,7 +151,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = '6';
@@ -163,7 +163,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -172,7 +172,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -186,7 +186,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = '7';
@@ -197,7 +197,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -206,7 +206,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -221,7 +221,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = '8';
@@ -232,7 +232,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -241,7 +241,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -255,7 +255,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = '9';
@@ -266,7 +266,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -275,7 +275,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -289,7 +289,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = 'A';
@@ -300,7 +300,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -309,7 +309,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -323,7 +323,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = 'B';
@@ -334,7 +334,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -343,7 +343,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -357,7 +357,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = 'C';
@@ -368,7 +368,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -377,7 +377,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -391,7 +391,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = 'D';
@@ -402,7 +402,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -411,7 +411,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -425,7 +425,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = 'E';
@@ -436,7 +436,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -445,7 +445,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -459,7 +459,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
         if (j >= 32) {
           h[j] = '\0';
           j = 0;
-          writing_to_hex_file(fs, d, h);
+          write_to_hex_file(fs, d, h);
         }
         h[j++] = '7';
         h[j++] = 'F';
@@ -470,7 +470,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 1];
               h[j++] = s[i + 2];
@@ -479,7 +479,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
               if (j >= 32) {
                 h[j] = '\0';
                 j = 0;
-                writing_to_hex_file(fs, d, h);
+                write_to_hex_file(fs, d, h);
               }
               h[j++] = s[i + 3];
               h[j++] = s[i + 4];
@@ -527,7 +527,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = '6';
@@ -536,7 +536,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = '7';
@@ -547,7 +547,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
             if (j >= 32) {
               h[j] = '\0';
               j = 0;
-              writing_to_hex_file(fs, d, h);
+              write_to_hex_file(fs, d, h);
             }
             h[j++] = s[i - 3];
             h[j++] = s[i - 2];
@@ -626,7 +626,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = '8';
@@ -635,7 +635,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = '9';
@@ -644,7 +644,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = 'A';
@@ -653,7 +653,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = 'B';
@@ -662,7 +662,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = 'C';
@@ -671,7 +671,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = 'D';
@@ -680,7 +680,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = 'E';
@@ -689,7 +689,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
           if (j >= 32) {
             h[j] = '\0';
             j = 0;
-            writing_to_hex_file(fs, d, h);
+            write_to_hex_file(fs, d, h);
           }
           h[j++] = '8';
           h[j++] = 'F';
@@ -700,7 +700,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
             if (j >= 32) {
               h[j] = '\0';
               j = 0;
-              writing_to_hex_file(fs, d, h);
+              write_to_hex_file(fs, d, h);
             }
             h[j++] = s[i - 3];
             h[j++] = s[i - 2];
@@ -712,7 +712,7 @@ void core_convertion_algorithm(FILE *fp, FILE *fs) {
     }
   }
   h[j] = '\0';
-  writing_to_hex_file(fs, d, h);
+  write_to_hex_file(fs, d, h);
   char *g = ":00000001FF";
   fputs(g, fs);
 }

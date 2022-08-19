@@ -5,9 +5,9 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-  FILE *fp, *fs;
+  FILE *input_file, *output_file;
 
-  fp = fopen(argv[1], "r");
-  fs = fopen("a.hex", "w");
-  core_convertion_algorithm(fp, fs);
+  input_file = fopen(argv[1], "r");
+  output_file = fopen("a.hex", "w");
+  core_convertion_algorithm(input_file, output_file);
 }
