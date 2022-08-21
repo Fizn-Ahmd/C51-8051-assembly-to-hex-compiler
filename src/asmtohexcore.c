@@ -47,73 +47,97 @@ void core_convertion_algorithm(FILE *input_fs, FILE *output_fs) {
 
     if (strstr(input_str, "mov") != NULL) {
       if (strstr(input_str, "a,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '4', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', '4', '#');
       }
-      if ((strstr(input_str, "r0,#") == NULL) && (check_condition(input_str, '#'))) {
-        update_three_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '5');
+      if ((strstr(input_str, "r0,#") == NULL) &&
+          (check_condition(input_str, '#'))) {
+        update_three_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '7', '5');
       }
       if (strstr(input_str, "@r0,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '6', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', '6', '#');
       }
       if (strstr(input_str, "@r1,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '7', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', '7', '#');
       }
-      if ((strstr(input_str, "r0,#") != NULL) && (strstr(input_str, "@r0,#") == NULL)) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '8', '#');
+      if ((strstr(input_str, "r0,#") != NULL) &&
+          (strstr(input_str, "@r0,#") == NULL)) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', '8', '#');
       }
       if (strstr(input_str, "r1,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '9', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', '9', '#');
       }
       if (strstr(input_str, "r2,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'A', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', 'A', '#');
       }
       if (strstr(input_str, "r3,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'B', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', 'B', '#');
       }
       if (strstr(input_str, "r4,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'C', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', 'C', '#');
       }
       if (strstr(input_str, "r5,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'D', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', 'D', '#');
       }
       if (strstr(input_str, "r6,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'E', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', 'E', '#');
       }
       if (strstr(input_str, "r7,#") != NULL) {
-        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'F', '#');
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                         &hex_index, '7', 'F', '#');
       }
       if (check_condition(input_str, '@')) {
         if (strstr(input_str, "@r0")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '6', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', '6', '@');
         }
         if (strstr(input_str, "@r1")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '7', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', '7', '@');
         }
       }
       if (check_condition(input_str, 'r')) {
         if (strstr(input_str, "r0")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '8', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', '8', '@');
         }
         if (strstr(input_str, "r1")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '9', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', '9', '@');
         }
         if (strstr(input_str, "r2")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'A', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', 'A', '@');
         }
         if (strstr(input_str, "r3")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'B', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', 'B', '@');
         }
         if (strstr(input_str, "r4")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'C', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', 'C', '@');
         }
         if (strstr(input_str, "r5")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'D', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', 'D', '@');
         }
         if (strstr(input_str, "r6")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'E', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', 'E', '@');
         }
         if (strstr(input_str, "r7")) {
-          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'F', '@');
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str,
+                           &hex_index, '8', 'F', '@');
         }
       }
     }

@@ -14,7 +14,7 @@ void str_cpy(char *src, char *dest) {
 
 /* Convert the string to lower case */
 void str_lower(char *str) {
-  for ( ; *str; ++str) 
+  for (; *str; ++str)
     *str = tolower(*str);
 }
 
@@ -44,7 +44,8 @@ void str_rev(char *str) {
   }
 }
 
-/* This funtion coverts the string hexadecimal to integer. eg: '0A' is converted to 10. */
+/* This funtion coverts the string hexadecimal to integer. eg: '0A' is converted
+ * to 10. */
 int str_to_int(char *str) {
   int i = 0, num = 0;
   while (str[i]) {
@@ -161,7 +162,8 @@ void check_hex_index(FILE *fs, char *gen_hex_str, char *addr_str, int *index) {
   }
 }
 
-void update_the_gen_hex_str(FILE *fs, char *input_str, char *addr_str, char *gen_hex_str, int i, int *j) {
+void update_the_gen_hex_str(FILE *fs, char *input_str, char *addr_str,
+                            char *gen_hex_str, int i, int *j) {
   if (input_str[i + 2] != 'x') {
     check_hex_index(fs, gen_hex_str, addr_str, j);
     gen_hex_str[*j++] = input_str[i + 1];
@@ -175,25 +177,26 @@ void update_the_gen_hex_str(FILE *fs, char *input_str, char *addr_str, char *gen
   }
 }
 
-void update_single_byte() {
+void update_single_byte() {}
 
-}
-
-void update_two_bytes(FILE *output_fs, char *gen_hex_str, char *input_str, char *addr_str, int *j, char op1, char op2, char symb) {
+void update_two_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,
+                      char *addr_str, int *j, char op1, char op2, char symb) {
   check_hex_index(output_fs, gen_hex_str, addr_str, j);
   gen_hex_str[*j++] = op1;
   gen_hex_str[*j++] = op2;
   int i = 0;
   while (input_str[i]) {
     if (input_str[i] == symb) {
-      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i, j);
+      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i,
+                             j);
     }
     i++;
   }
 }
 
-void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,, char *addr_str, int *j, char op1, char op2) {
-   check_hex_index(output_fs, gen_hex_str, addr_str, j);
+void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str, ,
+                        char *addr_str, int *j, char op1, char op2) {
+  check_hex_index(output_fs, gen_hex_str, addr_str, j);
   gen_hex_str[*j++] = op1;
   gen_hex_str[*j++] = op2;
   int i = 0;
@@ -202,50 +205,74 @@ void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,, ch
       check_hex_index(output_fs, gen_hex_str, addr_str, j);
       gen_hex_str[*j++] = input_str[i - 3];
       gen_hex_str[*j++] = input_str[i - 2];
-      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i, j);
+      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i,
+                             j);
     }
     i++;
   }
 }
 
 bool check_condition(char *str, char chr) {
-  switch (chr)
-  {
+  switch (chr) {
   case chr == 'r':
-    if ((strstr(input_str, "0,r") != NULL) || (strstr(input_str, "1,r") != NULL) ||
-        (strstr(input_str, "2,r") != NULL) || (strstr(input_str, "3,r") != NULL) ||
-        (strstr(input_str, "4,r") != NULL) || (strstr(input_str, "5,r") != NULL) ||
-        (strstr(input_str, "6,r") != NULL) || (strstr(input_str, "7,r") != NULL) ||
-        (strstr(input_str, "8,r") != NULL) || (strstr(input_str, "9,r") != NULL) ||
-        (strstr(input_str, "a,r") != NULL) || (strstr(input_str, "b,r") != NULL) ||
-        (strstr(input_str, "c,r") != NULL) || (strstr(input_str, "d,r") != NULL) ||
-        (strstr(input_str, "e,r") != NULL) || (strstr(input_str, "f,r") != NULL)) {
-          return true;
-        }
+    if ((strstr(input_str, "0,r") != NULL) ||
+        (strstr(input_str, "1,r") != NULL) ||
+        (strstr(input_str, "2,r") != NULL) ||
+        (strstr(input_str, "3,r") != NULL) ||
+        (strstr(input_str, "4,r") != NULL) ||
+        (strstr(input_str, "5,r") != NULL) ||
+        (strstr(input_str, "6,r") != NULL) ||
+        (strstr(input_str, "7,r") != NULL) ||
+        (strstr(input_str, "8,r") != NULL) ||
+        (strstr(input_str, "9,r") != NULL) ||
+        (strstr(input_str, "a,r") != NULL) ||
+        (strstr(input_str, "b,r") != NULL) ||
+        (strstr(input_str, "c,r") != NULL) ||
+        (strstr(input_str, "d,r") != NULL) ||
+        (strstr(input_str, "e,r") != NULL) ||
+        (strstr(input_str, "f,r") != NULL)) {
+      return true;
+    }
   case chr == '@':
-    if ((strstr(input_str, "0,@") != NULL) || (strstr(input_str, "1,@") != NULL) ||
-          (strstr(input_str, "2,@") != NULL) || (strstr(input_str, "3,@") != NULL) ||
-          (strstr(input_str, "4,@") != NULL) || (strstr(input_str, "5,@") != NULL) ||
-          (strstr(input_str, "6,@") != NULL) || (strstr(input_str, "7,@") != NULL) ||
-          (strstr(input_str, "8,@") != NULL) || (strstr(input_str, "9,@") != NULL) ||
-          (strstr(input_str, "a,@") != NULL) || (strstr(input_str, "b,@") != NULL) ||
-          (strstr(input_str, "c,@") != NULL) || (strstr(input_str, "d,@") != NULL) || 
-          (strstr(input_str, "e,@") != NULL) || (strstr(input_str, "f,@") != NULL)) {
-            return true;
-          }
-  case chr == '#'
+    if ((strstr(input_str, "0,@") != NULL) ||
+        (strstr(input_str, "1,@") != NULL) ||
+        (strstr(input_str, "2,@") != NULL) ||
+        (strstr(input_str, "3,@") != NULL) ||
+        (strstr(input_str, "4,@") != NULL) ||
+        (strstr(input_str, "5,@") != NULL) ||
+        (strstr(input_str, "6,@") != NULL) ||
+        (strstr(input_str, "7,@") != NULL) ||
+        (strstr(input_str, "8,@") != NULL) ||
+        (strstr(input_str, "9,@") != NULL) ||
+        (strstr(input_str, "a,@") != NULL) ||
+        (strstr(input_str, "b,@") != NULL) ||
+        (strstr(input_str, "c,@") != NULL) ||
+        (strstr(input_str, "d,@") != NULL) ||
+        (strstr(input_str, "e,@") != NULL) ||
+        (strstr(input_str, "f,@") != NULL)) {
+      return true;
+    }
+  case chr == '#':
     if ((strstr(input_str, "0,#") != NULL) ||
-          (strstr(input_str, "1,#") != NULL) || (strstr(input_str, "2,#") != NULL) ||
-          (strstr(input_str, "3,#") != NULL) || (strstr(input_str, "4,#") != NULL) ||
-          (strstr(input_str, "5,#") != NULL) || (strstr(input_str, "6,#") != NULL) ||
-          (strstr(input_str, "7,#") != NULL) || (strstr(input_str, "8,#") != NULL) ||
-          (strstr(input_str, "9,#") != NULL) || (strstr(input_str, "a,#") != NULL) ||
-          (strstr(input_str, "b,#") != NULL) || (strstr(input_str, "c,#") != NULL) ||
-          (strstr(input_str, "d,#") != NULL) || (strstr(input_str, "e,#") != NULL) ||
-          (strstr(input_str, "f,#") != NULL)) {
-            return true;
-          }
+        (strstr(input_str, "1,#") != NULL) ||
+        (strstr(input_str, "2,#") != NULL) ||
+        (strstr(input_str, "3,#") != NULL) ||
+        (strstr(input_str, "4,#") != NULL) ||
+        (strstr(input_str, "5,#") != NULL) ||
+        (strstr(input_str, "6,#") != NULL) ||
+        (strstr(input_str, "7,#") != NULL) ||
+        (strstr(input_str, "8,#") != NULL) ||
+        (strstr(input_str, "9,#") != NULL) ||
+        (strstr(input_str, "a,#") != NULL) ||
+        (strstr(input_str, "b,#") != NULL) ||
+        (strstr(input_str, "c,#") != NULL) ||
+        (strstr(input_str, "d,#") != NULL) ||
+        (strstr(input_str, "e,#") != NULL) ||
+        (strstr(input_str, "f,#") != NULL)) {
+      return true;
+    }
   default:
     return false;
   }
 }
+
