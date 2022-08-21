@@ -3,716 +3,123 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Core Algorithm takes the input file and generate output hex code */
-void core_convertion_algorithm(FILE *fp, FILE *fs) {
-  char s[100], d[20], h[20], hu[50];
-  int j = 0;
+#define MAX_ADDRESS_STRING_SIZE 4
+#define MAX_CHAR_TO_READ_EACH_LINE 100
 
-  while ((fgets(s, 100, fp)) != NULL) {
-    remove_spaces_in_string_buffer(s);
-    printf("%s", s);
-    if ((strstr(s, "END") != NULL) || (strstr(s, "end") != NULL)) {
+/*
+ * core_convertion_algorithm(): This method is the responsible for generating
+ * and updating the HEX code.
+ *
+ * @input_fs: Input file stream.
+ * @output_fs: Output file stream
+ */
+void core_convertion_algorithm(FILE *input_fs, FILE *output_fs) {
+  // TODO: make the size of input_str dynamic.
+  char input_str[MAX_CHAR_TO_READ_EACH_LINE];
+  char addr_str[MAX_ADDRESS_STRING_SIZE];
+  char gen_hex_str[MAX_HEX_INDEX];
+  int hex_index = 0;
+
+  while ((fgets(input_str, MAX_CHAR_TO_READ_EACH_LINE, input_fs)) != NULL) {
+    remove_spaces_in_string_buffer(input_str);
+    // Convert the string to lower case as 8051 asm is not case sensitive.
+    str_lower(input_str);
+    // If 'end' is found exit the wile loop.
+    if (strstr(input_str, "end") != NULL) {
       break;
     }
-    if ((strstr(s, "CSEGAT")) != NULL) {
-      int i = 0, j = 0;
-      while (s[i]) {
-        if ((s[i] >= '0' && s[i] <= '9')) {
-          d[j] = s[i];
-          j++;
-          i++;
-        } else if (s[i] >= 'A' && s[i] <= 'F') {
-          d[j] = s[i];
-          j++;
-          i++;
-        } else if (s[i] >= 'a' && s[i] <= 'f') {
-          d[j] = s[i];
-          j++;
-          i++;
+
+    if (strstr(input_str, "csegat") != NULL) {
+      int i = 0, addr_index = 0;
+      while (input_str[i]) {
+        if ((input_str[i] >= '0' && input_str[i] <= '9')) {
+          addr_str[addr_index++] = input_str[i++];
+        } else if (input_str[i] >= 'a' && input_str[i] <= 'f') {
+          addr_str[addr_index++] = input_str[i++];
         } else {
           i++;
         }
       }
-      d[j] = '\0';
-      str_rev(d);
-      d[4] = '\0';
+      addr_str[addr_index] = '\0';
+      str_rev(addr_str);
+      addr_str[MAX_ADDRESS_STRING_SIZE - 1] = '\0';
     }
-    if ((strstr(s, "MOV") != NULL) || (strstr(s, "mov") != NULL)) {
 
-      if ((strstr(s, "A,#") != NULL) || (strstr(s, "a,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
+    if (strstr(input_str, "mov") != NULL) {
+      if (strstr(input_str, "a,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '4', '#');
+      }
+      if ((strstr(input_str, "r0,#") == NULL) && (check_condition(input_str, '#'))) {
+        update_three_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '5');
+      }
+      if (strstr(input_str, "@r0,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '6', '#');
+      }
+      if (strstr(input_str, "@r1,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '7', '#');
+      }
+      if ((strstr(input_str, "r0,#") != NULL) && (strstr(input_str, "@r0,#") == NULL)) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '8', '#');
+      }
+      if (strstr(input_str, "r1,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', '9', '#');
+      }
+      if (strstr(input_str, "r2,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'A', '#');
+      }
+      if (strstr(input_str, "r3,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'B', '#');
+      }
+      if (strstr(input_str, "r4,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'C', '#');
+      }
+      if (strstr(input_str, "r5,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'D', '#');
+      }
+      if (strstr(input_str, "r6,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'E', '#');
+      }
+      if (strstr(input_str, "r7,#") != NULL) {
+        update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '7', 'F', '#');
+      }
+      if (check_condition(input_str, '@')) {
+        if (strstr(input_str, "@r0")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '6', '@');
         }
-        h[j++] = '7';
-        h[j++] = '4';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[j++] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[4] = '\0';
-            }
-          }
-          i++;
+        if (strstr(input_str, "@r1")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '7', '@');
         }
       }
-      if (((strstr(s, "0,#") != NULL) && (strstr(s, "R0,#") == NULL) &&
-           (strstr(s, "r0,#") == NULL)) ||
-          (strstr(s, "1,#") != NULL) || (strstr(s, "2,#") != NULL) ||
-          (strstr(s, "3,#") != NULL) || (strstr(s, "4,#") != NULL) ||
-          (strstr(s, "5,#") != NULL) || (strstr(s, "6,#") != NULL) ||
-          (strstr(s, "7,#") != NULL) || (strstr(s, "8,#") != NULL) ||
-          (strstr(s, "C,#") != NULL) || (strstr(s, "D,#") != NULL) ||
-          (strstr(s, "E,#") != NULL) || (strstr(s, "F,#") != NULL) ||
-          (strstr(s, "c,#") != NULL) || (strstr(s, "d,#") != NULL) ||
-          (strstr(s, "e,#") != NULL) || (strstr(s, "f,#") != NULL) ||
-          (strstr(s, "9,#") != NULL) || (strstr(s, "0A,#") != NULL) ||
-          (strstr(s, "a,#") != NULL) || (strstr(s, "0a,#") != NULL) ||
-          (strstr(s, "fA,#") != NULL) || (strstr(s, "B,#") != NULL) ||
-          (strstr(s, "fa,#") != NULL) || (strstr(s, "b,#") != NULL) ||
-          (strstr(s, "1A,#") != NULL) || (strstr(s, "2A,#") != NULL) ||
-          (strstr(s, "3A,#") != NULL) || (strstr(s, "4A,#") != NULL) ||
-          (strstr(s, "5A,#") != NULL) || (strstr(s, "6A,#") != NULL) ||
-          (strstr(s, "7A,#") != NULL) || (strstr(s, "8A,#") != NULL) ||
-          (strstr(s, "9A,#") != NULL) || (strstr(s, "AA,#") != NULL) ||
-          (strstr(s, "BA,#") != NULL) || (strstr(s, "CA,#") != NULL) ||
-          (strstr(s, "DA,#") != NULL) || (strstr(s, "EA,#") != NULL) ||
-          (strstr(s, "FA,#") != NULL) || (strstr(s, "aA,#") != NULL) ||
-          (strstr(s, "bA,#") != NULL) || (strstr(s, "cA,#") != NULL) ||
-          (strstr(s, "dA,#") != NULL) || (strstr(s, "eA,#") != NULL) ||
-          (strstr(s, "1a,#") != NULL) || (strstr(s, "2a,#") != NULL) ||
-          (strstr(s, "3a,#") != NULL) || (strstr(s, "4a,#") != NULL) ||
-          (strstr(s, "5a,#") != NULL) || (strstr(s, "6a,#") != NULL) ||
-          (strstr(s, "7a,#") != NULL) || (strstr(s, "8a,#") != NULL) ||
-          (strstr(s, "9a,#") != NULL) || (strstr(s, "Aa,#") != NULL) ||
-          (strstr(s, "Ba,#") != NULL) || (strstr(s, "Ca,#") != NULL) ||
-          (strstr(s, "Da,#") != NULL) || (strstr(s, "Ea,#") != NULL) ||
-          (strstr(s, "Fa,#") != NULL) || (strstr(s, "aa,#") != NULL) ||
-          (strstr(s, "ba,#") != NULL) || (strstr(s, "ca,#") != NULL) ||
-          (strstr(s, "da,#") != NULL) || (strstr(s, "ea,#") != NULL)) {
-
-        if (j >= 32) {
-          j = 0;
-          write_to_hex_file(fs, d, h);
+      if (check_condition(input_str, 'r')) {
+        if (strstr(input_str, "r0")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '8', '@');
         }
-        h[j++] = '7';
-        h[j++] = '5';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if (j >= 32) {
-              h[j] = '\0';
-              j = 0;
-              write_to_hex_file(fs, d, h);
-            }
-            h[j++] = s[i - 3];
-            h[j++] = s[i - 2];
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[j++] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[j++] = '\0';
-            }
-          }
-          i++;
+        if (strstr(input_str, "r1")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', '9', '@');
         }
-      }
-      if ((strstr(s, "@R0,#") != NULL) || (strstr(s, "@r0,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
+        if (strstr(input_str, "r2")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'A', '@');
         }
-        h[j++] = '7';
-        h[j++] = '6';
-        printf("%s", hu);
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[j++] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[j++] = '\0';
-            }
-          }
-          i++;
+        if (strstr(input_str, "r3")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'B', '@');
         }
-      }
-      if ((strstr(s, "@R1,#") != NULL) || (strstr(s, "@r1,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
+        if (strstr(input_str, "r4")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'C', '@');
         }
-        h[j++] = '7';
-        h[j++] = '7';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[j++] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[j++] = '\0';
-            }
-          }
-          i++;
+        if (strstr(input_str, "r5")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'D', '@');
         }
-      }
-      if (((strstr(s, "R0,#") != NULL) || (strstr(s, "r0,#") != NULL)) &&
-          ((strstr(s, "@R0,#") == NULL) && (strstr(s, "@r0,#") == NULL))) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
+        if (strstr(input_str, "r6")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'E', '@');
         }
-        h[j++] = '7';
-        h[j++] = '8';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[j++] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[j++] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R1,#") != NULL) || (strstr(s, "r1,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = '9';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[4] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R2,#") != NULL) || (strstr(s, "r2,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = 'A';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[4] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R3,#") != NULL) || (strstr(s, "r3,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = 'B';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[4] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R4,#") != NULL) || (strstr(s, "r4,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = 'C';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[4] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R5,#") != NULL) || (strstr(s, "r5,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = 'D';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              h[j++] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R6,#") != NULL) || (strstr(s, "r6,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = 'E';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[4] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "R7,#") != NULL) || (strstr(s, "r7,#") != NULL)) {
-        if (j >= 32) {
-          h[j] = '\0';
-          j = 0;
-          write_to_hex_file(fs, d, h);
-        }
-        h[j++] = '7';
-        h[j++] = 'F';
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '#') {
-            if ((s[i + 2] != 'x') && (s[i + 2] != 'X')) {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 1];
-              h[j++] = s[i + 2];
-              // h[4] = '\0';
-            } else {
-              if (j >= 32) {
-                h[j] = '\0';
-                j = 0;
-                write_to_hex_file(fs, d, h);
-              }
-              h[j++] = s[i + 3];
-              h[j++] = s[i + 4];
-              // h[j++] = '\0';
-            }
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "0,@") != NULL) || (strstr(s, "1,@") != NULL) ||
-          (strstr(s, "2,@") != NULL) || (strstr(s, "3,@") != NULL) ||
-          (strstr(s, "4,@") != NULL) || (strstr(s, "5,@") != NULL) ||
-          (strstr(s, "6,@") != NULL) || (strstr(s, "7,@") != NULL) ||
-          (strstr(s, "8,@") != NULL) || (strstr(s, "9,@") != NULL) ||
-          (strstr(s, "B,@") != NULL) || (strstr(s, "C,@") != NULL) ||
-          (strstr(s, "D,@") != NULL) || (strstr(s, "E,@") != NULL) ||
-          (strstr(s, "F,@") != NULL) || (strstr(s, "a,@") != NULL) ||
-          (strstr(s, "b,@") != NULL) || (strstr(s, "c,@") != NULL) ||
-          (strstr(s, "d,@") != NULL) || (strstr(s, "e,@") != NULL) ||
-          (strstr(s, "0A,@") != NULL) || (strstr(s, "1A,@") != NULL) ||
-          (strstr(s, "2A,@") != NULL) || (strstr(s, "3A,@") != NULL) ||
-          (strstr(s, "4A,@") != NULL) || (strstr(s, "5A,@") != NULL) ||
-          (strstr(s, "6A,@") != NULL) || (strstr(s, "7A,@") != NULL) ||
-          (strstr(s, "8A,@") != NULL) || (strstr(s, "9A,@") != NULL) ||
-          (strstr(s, "AA,@") != NULL) || (strstr(s, "BA,@") != NULL) ||
-          (strstr(s, "CA,@") != NULL) || (strstr(s, "DA,@") != NULL) ||
-          (strstr(s, "EA,@") != NULL) || (strstr(s, "FA,@") != NULL) ||
-          (strstr(s, "aA,@") != NULL) || (strstr(s, "bA,@") != NULL) ||
-          (strstr(s, "cA,@") != NULL) || (strstr(s, "dA,@") != NULL) ||
-          (strstr(s, "eA,@") != NULL) || (strstr(s, "fA,@") != NULL) ||
-          (strstr(s, "0a,@") != NULL) || (strstr(s, "1a,@") != NULL) ||
-          (strstr(s, "2a,@") != NULL) || (strstr(s, "3a,@") != NULL) ||
-          (strstr(s, "4a,@") != NULL) || (strstr(s, "5a,@") != NULL) ||
-          (strstr(s, "6a,@") != NULL) || (strstr(s, "7a,@") != NULL) ||
-          (strstr(s, "8a,@") != NULL) || (strstr(s, "9a,@") != NULL) ||
-          (strstr(s, "Aa,@") != NULL) || (strstr(s, "Ba,@") != NULL) ||
-          (strstr(s, "Ca,@") != NULL) || (strstr(s, "Da,@") != NULL) ||
-          (strstr(s, "Ea,@") != NULL) || (strstr(s, "Fa,@") != NULL) ||
-          (strstr(s, "aa,@") != NULL) || (strstr(s, "ba,@") != NULL) ||
-          (strstr(s, "ca,@") != NULL) || (strstr(s, "da,@") != NULL) ||
-          (strstr(s, "ea,@") != NULL) || (strstr(s, "fa,@") != NULL) ||
-          (strstr(s, "f,@") != NULL)) {
-
-        if ((strstr(s, "@R0")) || (strstr(s, "@r0"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = '6';
-        }
-        if ((strstr(s, "@R1")) || (strstr(s, "@r1"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = '7';
-        }
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '@') {
-            if (j >= 32) {
-              h[j] = '\0';
-              j = 0;
-              write_to_hex_file(fs, d, h);
-            }
-            h[j++] = s[i - 3];
-            h[j++] = s[i - 2];
-            // h[j++] = '\0';
-          }
-          i++;
-        }
-      }
-      if ((strstr(s, "0,R") != NULL) || (strstr(s, "1,R") != NULL) ||
-          (strstr(s, "2,R") != NULL) || (strstr(s, "3,R") != NULL) ||
-          (strstr(s, "4,R") != NULL) || (strstr(s, "5,R") != NULL) ||
-          (strstr(s, "6,R") != NULL) || (strstr(s, "7,R") != NULL) ||
-          (strstr(s, "8,R") != NULL) || (strstr(s, "9,R") != NULL) ||
-          (strstr(s, "B,R") != NULL) || (strstr(s, "C,R") != NULL) ||
-          (strstr(s, "D,R") != NULL) || (strstr(s, "E,R") != NULL) ||
-          (strstr(s, "F,R") != NULL) || (strstr(s, "a,R") != NULL) ||
-          (strstr(s, "b,R") != NULL) || (strstr(s, "c,R") != NULL) ||
-          (strstr(s, "d,R") != NULL) || (strstr(s, "e,R") != NULL) ||
-          (strstr(s, "f,R") != NULL) || (strstr(s, "0,r") != NULL) ||
-          (strstr(s, "1,r") != NULL) || (strstr(s, "2,r") != NULL) ||
-          (strstr(s, "3,r") != NULL) || (strstr(s, "4,r") != NULL) ||
-          (strstr(s, "5,r") != NULL) || (strstr(s, "6,r") != NULL) ||
-          (strstr(s, "7,r") != NULL) || (strstr(s, "8,r") != NULL) ||
-          (strstr(s, "C,r") != NULL) || (strstr(s, "D,r") != NULL) ||
-          (strstr(s, "E,r") != NULL) || (strstr(s, "F,r") != NULL) ||
-          (strstr(s, "c,r") != NULL) || (strstr(s, "d,r") != NULL) ||
-          (strstr(s, "e,r") != NULL) || (strstr(s, "f,r") != NULL) ||
-          (strstr(s, "9,r") != NULL) || (strstr(s, "0A,r") != NULL) ||
-          (strstr(s, "fA,r") != NULL) || (strstr(s, "B,r") != NULL) ||
-          (strstr(s, "a,r") != NULL) || (strstr(s, "0a,r") != NULL) ||
-          (strstr(s, "fa,r") != NULL) || (strstr(s, "b,r") != NULL) ||
-          (strstr(s, "0A,R") != NULL) || (strstr(s, "1A,R") != NULL) ||
-          (strstr(s, "2A,R") != NULL) || (strstr(s, "3A,R") != NULL) ||
-          (strstr(s, "4A,R") != NULL) || (strstr(s, "5A,R") != NULL) ||
-          (strstr(s, "6A,R") != NULL) || (strstr(s, "7A,R") != NULL) ||
-          (strstr(s, "8A,R") != NULL) || (strstr(s, "9A,R") != NULL) ||
-          (strstr(s, "AA,R") != NULL) || (strstr(s, "BA,R") != NULL) ||
-          (strstr(s, "CA,R") != NULL) || (strstr(s, "DA,R") != NULL) ||
-          (strstr(s, "EA,R") != NULL) || (strstr(s, "FA,R") != NULL) ||
-          (strstr(s, "aA,R") != NULL) || (strstr(s, "bA,R") != NULL) ||
-          (strstr(s, "cA,R") != NULL) || (strstr(s, "dA,R") != NULL) ||
-          (strstr(s, "eA,R") != NULL) || (strstr(s, "fA,R") != NULL) ||
-          (strstr(s, "0a,R") != NULL) || (strstr(s, "1a,R") != NULL) ||
-          (strstr(s, "2a,R") != NULL) || (strstr(s, "3a,R") != NULL) ||
-          (strstr(s, "4a,R") != NULL) || (strstr(s, "5a,R") != NULL) ||
-          (strstr(s, "6a,R") != NULL) || (strstr(s, "7a,R") != NULL) ||
-          (strstr(s, "8a,R") != NULL) || (strstr(s, "9a,R") != NULL) ||
-          (strstr(s, "Aa,R") != NULL) || (strstr(s, "Ba,R") != NULL) ||
-          (strstr(s, "Ca,R") != NULL) || (strstr(s, "Da,R") != NULL) ||
-          (strstr(s, "Ea,R") != NULL) || (strstr(s, "Fa,R") != NULL) ||
-          (strstr(s, "aa,R") != NULL) || (strstr(s, "ba,R") != NULL) ||
-          (strstr(s, "ca,R") != NULL) || (strstr(s, "da,R") != NULL) ||
-          (strstr(s, "ea,R") != NULL) || (strstr(s, "fa,R") != NULL) ||
-          (strstr(s, "1A,r") != NULL) || (strstr(s, "2A,r") != NULL) ||
-          (strstr(s, "3A,r") != NULL) || (strstr(s, "4A,r") != NULL) ||
-          (strstr(s, "5A,r") != NULL) || (strstr(s, "6A,r") != NULL) ||
-          (strstr(s, "7A,r") != NULL) || (strstr(s, "8A,r") != NULL) ||
-          (strstr(s, "9A,r") != NULL) || (strstr(s, "AA,r") != NULL) ||
-          (strstr(s, "BA,r") != NULL) || (strstr(s, "CA,r") != NULL) ||
-          (strstr(s, "DA,r") != NULL) || (strstr(s, "EA,r") != NULL) ||
-          (strstr(s, "FA,r") != NULL) || (strstr(s, "aA,r") != NULL) ||
-          (strstr(s, "bA,r") != NULL) || (strstr(s, "cA,r") != NULL) ||
-          (strstr(s, "dA,r") != NULL) || (strstr(s, "eA,r") != NULL) ||
-          (strstr(s, "1a,r") != NULL) || (strstr(s, "2a,r") != NULL) ||
-          (strstr(s, "3a,r") != NULL) || (strstr(s, "4a,r") != NULL) ||
-          (strstr(s, "5a,r") != NULL) || (strstr(s, "6a,r") != NULL) ||
-          (strstr(s, "7a,r") != NULL) || (strstr(s, "8a,r") != NULL) ||
-          (strstr(s, "9a,r") != NULL) || (strstr(s, "Aa,r") != NULL) ||
-          (strstr(s, "Ba,r") != NULL) || (strstr(s, "Ca,r") != NULL) ||
-          (strstr(s, "Da,r") != NULL) || (strstr(s, "Ea,r") != NULL) ||
-          (strstr(s, "Fa,r") != NULL) || (strstr(s, "aa,r") != NULL) ||
-          (strstr(s, "ba,r") != NULL) || (strstr(s, "ca,r") != NULL) ||
-          (strstr(s, "da,r") != NULL) || (strstr(s, "ea,r") != NULL)) {
-
-        if ((strstr(s, "R0")) || (strstr(s, "r0"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = '8';
-        }
-        if ((strstr(s, "R1")) || (strstr(s, "r1"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = '9';
-        }
-        if ((strstr(s, "R2")) || (strstr(s, "r2"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = 'A';
-        }
-        if ((strstr(s, "R3")) || (strstr(s, "r3"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = 'B';
-        }
-        if ((strstr(s, "R4")) || (strstr(s, "r4"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = 'C';
-        }
-        if ((strstr(s, "R5")) || (strstr(s, "r5"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = 'D';
-        }
-        if ((strstr(s, "R6")) || (strstr(s, "r6"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = 'E';
-        }
-        if ((strstr(s, "R7")) || (strstr(s, "r7"))) {
-          if (j >= 32) {
-            h[j] = '\0';
-            j = 0;
-            write_to_hex_file(fs, d, h);
-          }
-          h[j++] = '8';
-          h[j++] = 'F';
-        }
-        int i = 0;
-        while (s[i]) {
-          if (s[i] == '@') {
-            if (j >= 32) {
-              h[j] = '\0';
-              j = 0;
-              write_to_hex_file(fs, d, h);
-            }
-            h[j++] = s[i - 3];
-            h[j++] = s[i - 2];
-            // h[4] = '\0';
-          }
-          i++;
+        if (strstr(input_str, "r7")) {
+          update_two_bytes(output_fs, gen_hex_str, input_str, addr_str, &hex_index, '8', 'F', '@');
         }
       }
     }
   }
-  h[j] = '\0';
-  write_to_hex_file(fs, d, h);
+  gen_hex_str[hex_index] = '\0';
+  write_to_hex_file(output_fs, addr_str, gen_hex_str);
   char *g = ":00000001FF";
-  fputs(g, fs);
+  fputs(g, output_fs);
 }

@@ -12,6 +12,12 @@ void str_cpy(char *src, char *dest) {
   *src = *dest;
 }
 
+/* Convert the string to lower case */
+void str_lower(char *str) {
+  for ( ; *str; ++str) 
+    *str = tolower(*str);
+}
+
 /* Removing Spaces if there are any in assembly file */
 void remove_spaces_in_string_buffer(char *str) {
   while (*str) {
@@ -145,4 +151,101 @@ void write_to_hex_file(FILE *fs, char *d, char *h) {
   fputs(h, fs);
   fputs(gi, fs);
   fputc(10, fs);
+}
+
+void check_hex_index(FILE *fs, char *gen_hex_str, char *addr_str, int *index) {
+  if (*index >= MAX_HEX_INDEX) {
+    gen_hex_str[*index] = '\0';
+    *index = 0;
+    write_to_hex_file(fs, addr_str, gen_hex_str);
+  }
+}
+
+void update_the_gen_hex_str(FILE *fs, char *input_str, char *addr_str, char *gen_hex_str, int i, int *j) {
+  if (input_str[i + 2] != 'x') {
+    check_hex_index(fs, gen_hex_str, addr_str, j);
+    gen_hex_str[*j++] = input_str[i + 1];
+    gen_hex_str[*j++] = input_str[i + 2];
+    // h[j++] = '\0';
+  } else {
+    check_hex_index(fs, gen_hex_str, addr_str, j);
+    gen_hex_str[*j++] = input_str[i + 3];
+    gen_hex_str[*j++] = input_str[i + 4];
+    // h[4] = '\0';
+  }
+}
+
+void update_single_byte() {
+
+}
+
+void update_two_bytes(FILE *output_fs, char *gen_hex_str, char *input_str, char *addr_str, int *j, char op1, char op2, char symb) {
+  check_hex_index(output_fs, gen_hex_str, addr_str, j);
+  gen_hex_str[*j++] = op1;
+  gen_hex_str[*j++] = op2;
+  int i = 0;
+  while (input_str[i]) {
+    if (input_str[i] == symb) {
+      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i, j);
+    }
+    i++;
+  }
+}
+
+void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,, char *addr_str, int *j, char op1, char op2) {
+   check_hex_index(output_fs, gen_hex_str, addr_str, j);
+  gen_hex_str[*j++] = op1;
+  gen_hex_str[*j++] = op2;
+  int i = 0;
+  while (input_str[i]) {
+    if (input_str[i] == '#') {
+      check_hex_index(output_fs, gen_hex_str, addr_str, j);
+      gen_hex_str[*j++] = input_str[i - 3];
+      gen_hex_str[*j++] = input_str[i - 2];
+      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i, j);
+    }
+    i++;
+  }
+}
+
+bool check_condition(char *str, char chr) {
+  switch (chr)
+  {
+  case chr == 'r':
+    if ((strstr(input_str, "0,r") != NULL) || (strstr(input_str, "1,r") != NULL) ||
+        (strstr(input_str, "2,r") != NULL) || (strstr(input_str, "3,r") != NULL) ||
+        (strstr(input_str, "4,r") != NULL) || (strstr(input_str, "5,r") != NULL) ||
+        (strstr(input_str, "6,r") != NULL) || (strstr(input_str, "7,r") != NULL) ||
+        (strstr(input_str, "8,r") != NULL) || (strstr(input_str, "9,r") != NULL) ||
+        (strstr(input_str, "a,r") != NULL) || (strstr(input_str, "b,r") != NULL) ||
+        (strstr(input_str, "c,r") != NULL) || (strstr(input_str, "d,r") != NULL) ||
+        (strstr(input_str, "e,r") != NULL) || (strstr(input_str, "f,r") != NULL)) {
+          return true;
+        }
+  case chr == '@':
+    if ((strstr(input_str, "0,@") != NULL) || (strstr(input_str, "1,@") != NULL) ||
+          (strstr(input_str, "2,@") != NULL) || (strstr(input_str, "3,@") != NULL) ||
+          (strstr(input_str, "4,@") != NULL) || (strstr(input_str, "5,@") != NULL) ||
+          (strstr(input_str, "6,@") != NULL) || (strstr(input_str, "7,@") != NULL) ||
+          (strstr(input_str, "8,@") != NULL) || (strstr(input_str, "9,@") != NULL) ||
+          (strstr(input_str, "a,@") != NULL) || (strstr(input_str, "b,@") != NULL) ||
+          (strstr(input_str, "c,@") != NULL) || (strstr(input_str, "d,@") != NULL) || 
+          (strstr(input_str, "e,@") != NULL) || (strstr(input_str, "f,@") != NULL)) {
+            return true;
+          }
+  case chr == '#'
+    if ((strstr(input_str, "0,#") != NULL) ||
+          (strstr(input_str, "1,#") != NULL) || (strstr(input_str, "2,#") != NULL) ||
+          (strstr(input_str, "3,#") != NULL) || (strstr(input_str, "4,#") != NULL) ||
+          (strstr(input_str, "5,#") != NULL) || (strstr(input_str, "6,#") != NULL) ||
+          (strstr(input_str, "7,#") != NULL) || (strstr(input_str, "8,#") != NULL) ||
+          (strstr(input_str, "9,#") != NULL) || (strstr(input_str, "a,#") != NULL) ||
+          (strstr(input_str, "b,#") != NULL) || (strstr(input_str, "c,#") != NULL) ||
+          (strstr(input_str, "d,#") != NULL) || (strstr(input_str, "e,#") != NULL) ||
+          (strstr(input_str, "f,#") != NULL)) {
+            return true;
+          }
+  default:
+    return false;
+  }
 }
