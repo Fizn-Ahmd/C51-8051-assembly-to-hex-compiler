@@ -1,6 +1,6 @@
 #include "../include/asmtohex.h"
 
-#include <stdio.h>
+#include <ctype.h>
 
 /* This funtion does the strcpy operation */
 void str_cpy(char *src, char *dest) {
@@ -187,14 +187,14 @@ void update_two_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,
   int i = 0;
   while (input_str[i]) {
     if (input_str[i] == symb) {
-      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i,
+      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, i,
                              j);
     }
     i++;
   }
 }
 
-void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str, ,
+void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,
                         char *addr_str, int *j, char op1, char op2) {
   check_hex_index(output_fs, gen_hex_str, addr_str, j);
   gen_hex_str[*j++] = op1;
@@ -205,16 +205,16 @@ void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str, ,
       check_hex_index(output_fs, gen_hex_str, addr_str, j);
       gen_hex_str[*j++] = input_str[i - 3];
       gen_hex_str[*j++] = input_str[i - 2];
-      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, &i,
+      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, i,
                              j);
     }
     i++;
   }
 }
 
-bool check_condition(char *str, char chr) {
+char check_condition(char *input_str, char chr) {
   switch (chr) {
-  case chr == 'r':
+  case 'r':
     if ((strstr(input_str, "0,r") != NULL) ||
         (strstr(input_str, "1,r") != NULL) ||
         (strstr(input_str, "2,r") != NULL) ||
@@ -231,9 +231,9 @@ bool check_condition(char *str, char chr) {
         (strstr(input_str, "d,r") != NULL) ||
         (strstr(input_str, "e,r") != NULL) ||
         (strstr(input_str, "f,r") != NULL)) {
-      return true;
+      return 1;
     }
-  case chr == '@':
+  case '@':
     if ((strstr(input_str, "0,@") != NULL) ||
         (strstr(input_str, "1,@") != NULL) ||
         (strstr(input_str, "2,@") != NULL) ||
@@ -250,9 +250,9 @@ bool check_condition(char *str, char chr) {
         (strstr(input_str, "d,@") != NULL) ||
         (strstr(input_str, "e,@") != NULL) ||
         (strstr(input_str, "f,@") != NULL)) {
-      return true;
+      return 1;
     }
-  case chr == '#':
+  case '#':
     if ((strstr(input_str, "0,#") != NULL) ||
         (strstr(input_str, "1,#") != NULL) ||
         (strstr(input_str, "2,#") != NULL) ||
@@ -269,10 +269,10 @@ bool check_condition(char *str, char chr) {
         (strstr(input_str, "d,#") != NULL) ||
         (strstr(input_str, "e,#") != NULL) ||
         (strstr(input_str, "f,#") != NULL)) {
-      return true;
+      return 1;
     }
   default:
-    return false;
+    return 0;
   }
 }
 

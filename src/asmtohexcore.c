@@ -1,8 +1,5 @@
 #include "../include/asmtohex.h"
 
-#include <stdio.h>
-#include <string.h>
-
 #define MAX_ADDRESS_STRING_SIZE 4
 #define MAX_CHAR_TO_READ_EACH_LINE 100
 

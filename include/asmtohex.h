@@ -2,6 +2,7 @@
 #define asmtohex
 
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_HEX_INDEX 32
 
@@ -19,6 +20,6 @@ void update_the_gen_hex_str(FILE *, char *, char *, char *, int, int *);
 void update_single_byte();
 void update_two_bytes(FILE *, char *, char *, char *, int *, char, char, char);
 void update_three_bytes(FILE *, char *, char *, char *, int *, char, char);
-bool check_condition(char *, char);
+char check_condition(char *, char);
 
 #endif

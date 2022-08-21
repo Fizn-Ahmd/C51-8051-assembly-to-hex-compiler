@@ -1,8 +1,6 @@
 #include "../include/asmtohex.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int main(int argc, char *argv[]) {
   FILE *input_fs, *output_fs;
