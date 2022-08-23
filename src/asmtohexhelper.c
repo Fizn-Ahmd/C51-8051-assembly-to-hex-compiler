@@ -21,6 +21,11 @@ void str_lower(char *str) {
     *str = tolower(*str);
 }
 
+void str_upper(char *str) {
+  for (; *str; ++str)
+    *str = toupper(*str);
+}
+
 /* Removing Spaces if there are any in assembly file */
 void remove_spaces_in_string_buffer(char *str) {
   while (*str) {
@@ -155,7 +160,8 @@ void write_to_hex_file(FILE *output_fs, char *addr_str, char *hex_gen_str) {
   fputc(10, output_fs); // this adds new line
 }
 
-void check_hex_index(FILE *fs, char *gen_hex_str, char *addr_str, int *hex_index) {
+void check_hex_index(FILE *fs, char *gen_hex_str, char *addr_str,
+                     int *hex_index) {
   if (*hex_index >= MAX_HEX_INDEX) {
     gen_hex_str[*hex_index] = '\0';
     *hex_index = 0;
@@ -167,13 +173,13 @@ void update_the_gen_hex_str(FILE *fs, char *input_str, char *addr_str,
                             char *gen_hex_str, int i, int *hex_index) {
   if (input_str[i + 2] != 'x') {
     check_hex_index(fs, gen_hex_str, addr_str, hex_index);
-    gen_hex_str[*hex_index++] = input_str[i + 1];
-    gen_hex_str[*hex_index++] = input_str[i + 2];
+    gen_hex_str[(*hex_index)++] = input_str[i + 1];
+    gen_hex_str[(*hex_index)++] = input_str[i + 2];
     // h[hex_index++] = '\0';
   } else {
     check_hex_index(fs, gen_hex_str, addr_str, hex_index);
-    gen_hex_str[*hex_index++] = input_str[i + 3];
-    gen_hex_str[*hex_index++] = input_str[i + 4];
+    gen_hex_str[(*hex_index)++] = input_str[i + 3];
+    gen_hex_str[(*hex_index)++] = input_str[i + 4];
     // h[4] = '\0';
   }
 }
@@ -181,31 +187,43 @@ void update_the_gen_hex_str(FILE *fs, char *input_str, char *addr_str,
 void update_single_byte() {}
 
 void update_two_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,
-                      char *addr_str, int *hex_index, char op1, char op2, char symb) {
-  check_hex_index(output_fs, gen_hex_str, addr_str, j);
-  gen_hex_str[*hex_index++] = op1;
-  gen_hex_str[*hex_index++] = op2;
+                      char *addr_str, int *hex_index, char op1, char op2,
+                      char symb) {
+  check_hex_index(output_fs, gen_hex_str, addr_str, hex_index);
+  gen_hex_str[(*hex_index)++] = op1;
+  gen_hex_str[(*hex_index)++] = op2;
   int i = 0;
-  while (input_str[i]) {
-    if (input_str[i] == symb) {
-      update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, i,
-                             hex_index);
+  if (symb == '#') {
+    while (input_str[i]) {
+      if (input_str[i] == symb) {
+        update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, i,
+                               hex_index);
+      }
+      i++;
     }
-    i++;
+  } else if (symb == '@' || symb == 'r') {
+    while (input_str[i]) {
+      if (input_str[i] == symb) {
+        check_hex_index(output_fs, gen_hex_str, addr_str, hex_index);
+        gen_hex_str[(*hex_index)++] = input_str[i - 3];
+        gen_hex_str[(*hex_index)++] = input_str[i - 2];
+      }
+      i++;
+    }
   }
 }
 
 void update_three_bytes(FILE *output_fs, char *gen_hex_str, char *input_str,
                         char *addr_str, int *hex_index, char op1, char op2) {
   check_hex_index(output_fs, gen_hex_str, addr_str, hex_index);
-  gen_hex_str[*hex_index++] = op1;
-  gen_hex_str[*hex_index++] = op2;
+  gen_hex_str[(*hex_index)++] = op1;
+  gen_hex_str[(*hex_index)++] = op2;
   int i = 0;
   while (input_str[i]) {
     if (input_str[i] == '#') {
       check_hex_index(output_fs, gen_hex_str, addr_str, hex_index);
-      gen_hex_str[*hex_index++] = input_str[i - 3];
-      gen_hex_str[*hex_index++] = input_str[i - 2];
+      gen_hex_str[(*hex_index)++] = input_str[i - 3];
+      gen_hex_str[(*hex_index)++] = input_str[i - 2];
       update_the_gen_hex_str(output_fs, input_str, addr_str, gen_hex_str, i,
                              hex_index);
     }
@@ -226,7 +244,7 @@ char check_condition(char *input_str, char chr) {
         (strstr(input_str, "7,r") != NULL) ||
         (strstr(input_str, "8,r") != NULL) ||
         (strstr(input_str, "9,r") != NULL) ||
-        (strstr(input_str, "a,r") != NULL) ||
+        check_if_not_accumulator(input_str) ||
         (strstr(input_str, "b,r") != NULL) ||
         (strstr(input_str, "c,r") != NULL) ||
         (strstr(input_str, "d,r") != NULL) ||
@@ -245,7 +263,7 @@ char check_condition(char *input_str, char chr) {
         (strstr(input_str, "7,@") != NULL) ||
         (strstr(input_str, "8,@") != NULL) ||
         (strstr(input_str, "9,@") != NULL) ||
-        (strstr(input_str, "a,@") != NULL) ||
+        check_if_not_accumulator(input_str) ||
         (strstr(input_str, "b,@") != NULL) ||
         (strstr(input_str, "c,@") != NULL) ||
         (strstr(input_str, "d,@") != NULL) ||
@@ -264,7 +282,7 @@ char check_condition(char *input_str, char chr) {
         (strstr(input_str, "7,#") != NULL) ||
         (strstr(input_str, "8,#") != NULL) ||
         (strstr(input_str, "9,#") != NULL) ||
-        (strstr(input_str, "a,#") != NULL) ||
+        check_if_not_accumulator(input_str) ||
         (strstr(input_str, "b,#") != NULL) ||
         (strstr(input_str, "c,#") != NULL) ||
         (strstr(input_str, "d,#") != NULL) ||
@@ -277,3 +295,25 @@ char check_condition(char *input_str, char chr) {
   }
 }
 
+char check_if_not_accumulator(char *input_str) {
+  if ((strstr(input_str, "0a,#") != NULL) ||
+      (strstr(input_str, "1a,#") != NULL) ||
+      (strstr(input_str, "2a,#") != NULL) ||
+      (strstr(input_str, "3a,#") != NULL) ||
+      (strstr(input_str, "4a,#") != NULL) ||
+      (strstr(input_str, "5a,#") != NULL) ||
+      (strstr(input_str, "6a,#") != NULL) ||
+      (strstr(input_str, "7a,#") != NULL) ||
+      (strstr(input_str, "8a,#") != NULL) ||
+      (strstr(input_str, "9a,#") != NULL) ||
+      (strstr(input_str, "aa,#") != NULL) ||
+      (strstr(input_str, "ba,#") != NULL) ||
+      (strstr(input_str, "ca,#") != NULL) ||
+      (strstr(input_str, "da,#") != NULL) ||
+      (strstr(input_str, "ea,#") != NULL) ||
+      (strstr(input_str, "fa,#") != NULL)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
