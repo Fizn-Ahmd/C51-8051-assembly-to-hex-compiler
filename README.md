@@ -1,18 +1,19 @@
-**Procedure to build:**
+# This is a simple 8051(C51) assembly compiler.
 
-1. make -f Makefile.mk all
+## Procedure to build:
 
-It will generate the asmtohex.out for linux and asmtohex.exe for windows.
+make -f Makefile.mk all
 
-To clean the build
+- This will generate the asmtohex.out for linux and asmtohex.exe for windows
 
-1. make -f Makefile clean
+make -f Makefile clean
 
-**Using the generated binaries:**
+-  To clean the build
 
-1. Run asmtohex <\c51 asm file/>
+## Direction of Use:
 
-2. It will generate the a.hex
+1. Run ./asmtohex <8051 asm file>
 
-3. Load the a.hex into 8051 board.
+2. This will generate the a.hex
 
+3. Load the a.hex into 8051 board
