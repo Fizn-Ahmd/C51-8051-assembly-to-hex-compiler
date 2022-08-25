@@ -5,6 +5,8 @@
 #define MAX_CHECKSUM_SIZE 3
 #define MAX_BYTES_IN_A_LINE 16
 
+int addr_count;
+
 /* This funtion does the strcpy operation */
 void str_cpy(char *src, char *dest) {
   while (*dest) {
@@ -21,9 +23,23 @@ void str_lower(char *str) {
     *str = tolower(*str);
 }
 
+/* Convert the string to upper case */
 void str_upper(char *str) {
   for (; *str; ++str)
     *str = toupper(*str);
+}
+
+/* Shift the string to left by one byte */
+void str_shift_left(char *str) {
+  int i = 0, j = 0;
+  while (str[i]) {
+    i++;
+  }
+  j = i + 1;
+  while (i >= 0) {
+    str[j--] = str[i--];
+  }
+  str[j] = '0';
 }
 
 /* Removing Spaces if there are any in assembly file */
@@ -49,6 +65,26 @@ void str_rev(char *str) {
     *str = temp;
     str++;
     str2--;
+  }
+}
+
+void increment_addr_str(char *str) {
+  if ((str[2] >= '0' && str[2] <= '9') || (str[2] >= 'A' && str[2] <= 'E')) {
+    str[2] += 1;
+  } else {
+    str[2] = '0';
+    if ((str[1] >= '0' && str[1] <= '9') || (str[1] >= 'A' && str[1] <= 'E')) {
+      str[1] += 1;
+    } else {
+      str[1] = '0';
+      if ((str[0] >= '0' && str[0] <= '9') ||
+          (str[0] >= 'A' && str[0] <= 'E')) {
+        str[1] += 1;
+      } else {
+        str[0] = '0';
+        str[3] = '0';
+      }
+    }
   }
 }
 
@@ -139,6 +175,11 @@ void write_to_hex_file(FILE *output_fs, char *addr_str, char *hex_gen_str) {
       byte_size++;
     i++;
   }
+
+  if (addr_count != 0) {
+    increment_addr_str(addr_str);
+  }
+  addr_count++;
 
   fputc(':', output_fs);
   if (byte_size >= 0 && byte_size <= 9) {

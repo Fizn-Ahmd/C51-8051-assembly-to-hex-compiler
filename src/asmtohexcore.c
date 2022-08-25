@@ -1,5 +1,7 @@
 #include "../include/asmtohex.h"
 
+#include <stdlib.h>
+
 #define MAX_ADDRESS_STRING_SIZE 5
 #define MAX_CHAR_TO_READ_EACH_LINE 100
 
@@ -16,9 +18,11 @@ void core_convertion_algorithm(FILE *input_fs, FILE *output_fs) {
   char addr_str[MAX_ADDRESS_STRING_SIZE];
   char gen_hex_str[MAX_HEX_INDEX];
   int hex_index = 0;
+  int line_num = 0;
 
   while ((fgets(input_str, MAX_CHAR_TO_READ_EACH_LINE, input_fs)) != NULL) {
     remove_spaces_in_string_buffer(input_str);
+    line_num++;
     // Convert the string to lower case as 8051 asm is not case sensitive.
     str_lower(input_str);
     // TODO: Remove Comments before starting the core algo
@@ -29,6 +33,13 @@ void core_convertion_algorithm(FILE *input_fs, FILE *output_fs) {
 
     if (strstr(input_str, "csegat") != NULL) {
       int i = 0, addr_index = 0;
+      if (addr_count != 0) {
+        gen_hex_str[hex_index] = '\0';
+        hex_index = 0;
+        write_to_hex_file(output_fs, addr_str, gen_hex_str);
+        addr_count = 0;
+      }
+
       while (input_str[i]) {
         if (input_str[i] == 'x') {
           while (input_str[i]) {
@@ -44,10 +55,17 @@ void core_convertion_algorithm(FILE *input_fs, FILE *output_fs) {
           i++;
         }
       }
-      while (addr_index < MAX_ADDRESS_STRING_SIZE - 1) {
-        addr_str[addr_index++] = '0';
-      }
       addr_str[addr_index] = '\0';
+      if (addr_index > MAX_ADDRESS_STRING_SIZE - 1) {
+        printf("ERROR: %s memory address is too long: line %d", addr_str,
+               line_num);
+        exit(1);
+      }
+
+      while (addr_index < MAX_ADDRESS_STRING_SIZE - 1) {
+        str_shift_left(addr_str);
+        addr_index++;
+      }
       str_upper(addr_str);
     }
 

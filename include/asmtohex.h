@@ -13,6 +13,7 @@ void str_cpy(char *, char *);
 void str_rev(char *);
 void str_lower(char *);
 void str_upper(char *);
+void str_shift_left(char *);
 void remove_spaces_in_string_buffer(char *);
 void write_to_hex_file(FILE *, char *, char *);
 void core_convertion_algorithm(FILE *, FILE *);
@@ -23,5 +24,7 @@ void update_two_bytes(FILE *, char *, char *, char *, int *, char, char, char);
 void update_three_bytes(FILE *, char *, char *, char *, int *, char, char);
 char check_condition(char *, char);
 char check_if_not_accumulator(char *);
+
+extern int addr_count;
 
 #endif
